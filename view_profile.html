@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: rgb(232 231 234 ); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-container {
+            display: contents;
+            flex-direction: column;
+            align-items: stretch; 
+            max-width: 800px; 
+            width: 100%;
+            background-color: transparent;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: none; 
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Refined shadow */
+            margin-top: 0; 
+        }
+
+
+        .left-panel {
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem; 
+            text-align: left;
+            margin-left: 15%;
+            width: 40%;
+            box-sizing: border-box;
+        }
+
+
+        .left-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .left-panel li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .left-panel li::before {
+            content: '✓'; 
+            color: #16a34a; 
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .right-panel {
+            width: 70%;
+            height: 90%;
+            margin-right: 10%;
+            box-sizing: border-box;
+        }
+
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.25rem;
+            color: #1e293b; 
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: #4b5563; 
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: calc(100% - 2rem); 
+            padding: 0.4rem; 
+            border-radius: 0.9rem; 
+            border: 1px solid #d1d5db; 
+            font-size: 1rem;
+            color: #374151; 
+            transition: border-color 0.2s ease-in-out, shadow-sm 0.2s ease-in-out; /* Added shadow transition */
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #24722d; 
+            box-shadow: 0 0 0 3px rgba(29, 126, 68, 0.15); 
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            align-items: center;
+        }
+
+        .gender-options label {
+            margin-bottom: 0;
+            font-weight: 500; 
+            color: #4b5563;
+        }
+
+        .gender-options input[type="radio"] {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 0.75rem;
+            cursor: pointer;
+            width: 1.1rem; /* Increased size of checkbox */
+            height: 1.1rem;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+
+        button.next-btn {
+            padding: 0.9rem 2rem; 
+            background-color: rgb(31, 130, 104); 
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600; 
+            border-radius: 0.5rem; 
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease; /* Added transform */
+            width: 100%; 
+            display: block;
+            margin-top: 2rem; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button.next-btn:hover {
+            background-color: rgb(24, 101, 81); 
+            transform: scale(1.02); 
+        }
+
+        @media (max-width: 768px) { 
+            .main-container {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+                padding: 1.5rem;
+            }
+             .left-panel {
+                margin-bottom: 1rem;
+             }
+        }
+
+        @media (max-width: 480px) { /* Small screens (phones) */
+            .content-wrapper {
+                padding: 1.25rem;
+            }
+            .form-group input {
+                width: 100%;
+            }
+            .gender-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head><body class="bg-gray-100">
+    <a href="index.html">
+        <img src="images/logo.png" style="height: 45px; width: 60px; margin-top: -45vh;" alt="">
+    </a>
+    
+    <div class="main-container">
+        <div class="left-panel">
+            <img src="images/Captureimg.PNG" alt="">
+        </div>
+        <div class="content-wrapper right-panel">
+            <h2>Basic Details</h2>
+            <form action="profile.php" method="post">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth (DOB)</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="gender-options">
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="female" required>
+                        <label for="female">Female</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="Enter email address">
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="whatsapp-updates" name="whatsapp_updates">
+                        <label for="whatsapp-updates">Send me important job updates on Whatsapp</label>
+                    </div>
+                </div>
+                <button type="submit" class="next-btn">Next</button>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>

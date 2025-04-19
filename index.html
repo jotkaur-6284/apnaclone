@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apna Clone Navbar</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="#" class="logo">
+        <div class="logo-image"></div>
+      </a>
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <div class="dropdown jobs-dropdown">
+        <a href="#" class="dropbtn">Jobs <i class="arrow down"></i></a>
+        <div class="dropdown-content">
+          <a href="#">Work From Home Jobs</a>
+          <a href="#">Part Time Jobs</a>
+          <a href="#">Freshers Jobs</a>
+          <a href="#">Jobs for women</a>
+          <a href="#">Full Time Jobs</a>
+          <a href="#">Night Shift Jobs</a>
+          <a href="#" class="arrow-link">Jobs By City</a>
+          <a href="#" class="arrow-link">Jobs By Department</a>
+          <a href="#" class="arrow-link">Jobs By Company</a>
+          <a href="#" class="arrow-link">Jobs By Qualification</a>
+          <a href="#" class="arrow-link">Others</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropbtn">Career Compass <i class="arrow down"></i></a>
+        <div class="dropdown-content">
+          <a href="#">Assessments</a>
+          <a href="#">Career Guidance</a>
+          <a href="#">Skill Development</a>
+        </div>
+      </div>
+      <a href="#">Contests <span class="new-text">NEW</span></a>
+      <a href="#" class="new-badge">Degree <span class="new-text">NEW</span></a>
+      <div class="navbar-right" id="navbarRight">
+        <a href="Emp_login.html" class="employer-login">Employer Login</a>
+        <button class="candidate-login" id="login-button" onclick="showMobileModal()"
+          style="background-color: rgb(31, 130, 104);">Candidate Login</button>
+        <div class="dropdown">
+          <a href="#" class="dropbtn"><img id="userLogo" src="images/userlogo.png" alt="User Logo" class="user-logo"></a>
+          <div class="dropdown-content">
+            <a href="view_profile.html">View Profile</a><br>
+            <button onclick="location.reload()"><a href="#">logout</a></button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </nav>
+
+
+  <!-- code of popup -->
+
+  <!-- Mobile Number Modal -->
+  <div class="modal-overlay" id="mobileModal">
+    <div class="modal">
+      <span class="close-btn" onclick="hideMobileModal()">&times;</span>
+      <h3>Enter your mobile number</h3>
+      <div>
+        <!-- <label for="phone">+91</label> -->
+        +91 <input type="text" id="phoneInput" placeholder="Eg: 9876543210" maxlength="10" />
+      </div>
+      <p class="terms">
+        By continuing, you agree to the Apna’s <a href="#">Terms of service</a> and
+        <a href="#">Privacy Policy</a>
+      </p>
+      <button id="nextBtn" class="next-btn">NEXT</button>
+    </div>
+  </div>
+
+  <!-- OTP Modal -->
+  <div class="modal-overlay" id="otpModal">
+    <div class="modal">
+      <span class="close-btn" onclick="hideOtpModal()">&times;</span>
+      <h3>Enter OTP</h3>
+      <p>
+        We have sent an OTP on : <span id="userNumber"></span>
+        <span class="edit-icon" onclick="editNumber()">✏️</span>
+        <br>NOTE:Enter OTP(1234)
+      </p>
+      <div class="otp-inputs">
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+        <input type="text" maxlength="1" />
+      </div>
+      <div class="timer" id="timer">00:30</div>
+      <p class="otp-text">
+        Didn't get the OTP? <a href="#">Resend</a>
+      </p>
+      <button id="submitOtpBtn" onclick="verifyOtpAndShowLogo()">Submit</button>
+    </div>
+  </div>
+
+  <script>
+    const phoneInput = document.getElementById("phoneInput");
+    const nextBtn = document.getElementById("nextBtn");
+    const userNumber = document.getElementById("userNumber");
+    const timerDisplay = document.getElementById("timer");
+    const loginButton = document.getElementById('login-button');
+    const mobileModal = document.getElementById('mobileModal');
+    const otpModal = document.getElementById('otpModal');
+    const navbarRight = document.getElementById('navbarRight');
+    const employerLogin = document.querySelector('.employer-login');
+    const candidateLoginButton = document.querySelector('.candidate-login');
+    const userLogo = document.getElementById('userLogo');
+    const otpInputs = document.querySelectorAll('.otp-inputs input');
+    const submitOtpBtn = document.getElementById('submitOtpBtn')
+
+
+    // Show Mobile Modal
+    function showMobileModal() {
+      mobileModal.style.display = "flex";
+    }
+
+    // Hide Mobile Modal
+    function hideMobileModal() {
+      mobileModal.style.display = "none";
+    }
+
+    // Show OTP Modal
+    function showOtpModal() {
+      otpModal.style.display = "flex";
+    }
+
+    // Hide OTP Modal
+    function hideOtpModal() {
+      otpModal.style.display = "none";
+    }
+
+    // Go back to edit number
+    function editNumber() {
+      hideOtpModal();
+      showMobileModal();
+    }
+
+    // Enable/Disable NEXT Button
+    phoneInput.addEventListener("input", function () {
+      const number = phoneInput.value;
+      if (/^\d{10}$/.test(number)) {
+        nextBtn.classList.add("active");
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.classList.remove("active");
+        nextBtn.disabled = true;
+      }
+    });
+
+    // On NEXT Click
+    nextBtn.addEventListener("click", function () {
+      if (nextBtn.classList.contains("active")) {
+        const mobile = "+91-" + phoneInput.value;
+        userNumber.textContent = mobile;
+        hideMobileModal();
+        showOtpModal();
+        startTimer();
+      }
+    });
+
+    // OTP Timer
+    function startTimer() {
+      let timeLeft = 30;
+      timerDisplay.textContent = `00:${timeLeft}`;
+      const countdown = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+        if (timeLeft <= 0) clearInterval(countdown);
+      }, 1000);
+    }
+
+    // After OTP is verified
+    function afterOtpVerified() {
+      // Remove employer and candidate login buttons
+      if (navbarRight) {
+        navbarRight.removeChild(employerLogin);
+        navbarRight.removeChild(candidateLoginButton);
+      }
+      //show user logo
+      userLogo.style.display = 'flex';
+    }
+
+    function verifyOtpAndShowLogo() {
+      const enteredOtp = Array.from(otpInputs).map(input => input.value).join('');
+      if (enteredOtp === "1234") { 
+        afterOtpVerified();
+        hideOtpModal();
+
+      } else {
+        alert("Incorrect OTP, Please try again");
+      }
+    }
+  </script>
+
+  <!-- end pop up -->
+
+  <script>
+    // Sticky Navbar on scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Hamburger toggle
+    function toggleMenu() {
+      document.getElementById("navLinks").classList.toggle("active");
+    }
+  </script>
+  <div class="d">
+    <div class="container">
+      <div class="text-section">
+        <h4 style="color: #17803d; font-weight: bold;">INDIA'S #1 JOB PLATFORM</h4>
+        <h1>Your job search ends here</h1>
+        <p>Discover 50 lakh+ career opportunities</p>
+
+        <div class="search-bar">
+          <input type="text" id="scrollInput" placeholder="Search jobs by 'skill'" readonly>
+          <select>
+            <option>Your Experience</option>
+          </select>
+          <input type="text" placeholder="Search for an area or city">
+          <button>Search jobs</button>
+        </div>
+
+        <!-- SUPPORT & LOGOS SECTION -->
+        <section class="support-logos">
+          <h3>Proud to Support</h3>
+          <div class="logos">
+            <img src="images/logoindia-removebg-preview.png" alt="gov" />
+            <img src="images/logoaci-removebg-preview.png" alt="aicte" />
+            <img src="images/logodpt-removebg-preview.png" alt="dpiit" />
+          </div>
+
+          <div class="image-section">
+            <img src="images/main.png" alt="Apna person">
+          </div>
+          <h4 style="margin-top: -9.47rem;" class="k">Trusted by 1000+ enterprises and 7 lakh+ MSMEs for hiring</h4>
+          <marquee behavior="scroll" direction="left" scrollamount="6" class="mar">
+            <img src="images/logoswiggy-removebg-preview.png" alt="Swiggy" />
+            <img src="images/logouber-removebg-preview.png" alt="Uber" />
+            <img src="images/logojio-removebg-preview.png" alt="Urban Company" />
+            <img src="images/logozometo-removebg-preview.png" alt="Zomato" />
+            <img src="images/logoindia-removebg-preview.png" alt="FD" />
+            <img src="images/logozometo-removebg-preview.png" alt="Aditya" />
+          </marquee>
+        </section>
+      </div>
+
+      <script>
+        const placeholders = ["skill", "title", "company"];
+        let index = 0;
+        const input = document.getElementById("scrollInput");
+
+        setInterval(() => {
+          input.placeholder = "Search jobs by '" + placeholders[index] + "'";
+          index = (index + 1) % placeholders.length;
+        }, 2000);
+      </script>
+    </div>
+
+    <!-- job boxes -->
+    <div class="mainb">
+      <div class="mainbox">
+        <div class="job-box frnt">
+          <p class="trending-text"></p>
+          <h2 class="job-title tt">Popular Searches On Apna</h2>
+
+        </div>
+        <div class="job-box one">
+          <p class="trending-text">TRENDING AT #1</p>
+          <h2 class="job-title">Jobs for Freshers</h2>
+          <button class="view-all-btn">View all →</button>
+          <img src="images/fresher-removebg-preview.png" alt="Student" class="student-img">
+        </div>
+        <div class="job-box two">
+          <p class="trending-text">TRENDING AT #2</p>
+          <h2 class="job-title">Work From Home Jobs</h2>
+          <button class="view-all-btn">View all →</button>
+          <img src="images/fre-removebg-preview.png" alt="Student" class="student-img">
+        </div>
+      </div>
+
+      <br>
+
+      <div class="mainbox x ">
+        <div class="job-box three">
+          <p class="trending-text">TRENDING AT #3</p>
+          <h2 class="job-title">Part Time Jobs</h2>
+          <button class="view-all-btn">View all →</button>
+          <img src="images/part-removebg-preview.png" alt="Student" class="student-img">
+        </div>
+        <div class="job-box four">
+          <p class="trending-text">TRENDING AT #4</p>
+          <h2 class="job-title">Jobs for Women</h2>
+          <button class="view-all-btn">View all →</button>
+          <img src="images/women-removebg-preview.png" alt="Student" class="student-img">
+        </div>
+        <div class="job-box five">
+          <p class="trending-text">TRENDING AT #5</p>
+          <h2 class="job-title">Full Time Jobs</h2>
+          <button class="view-all-btn">View all →</button>
+          <img src="images/full_time-removebg-preview.png" alt="Student" class="student-img">
+        </div>
+      </div>
+    </div>
+
+
+    <!-- job opening -->
+
+    <div class="containerr">
+      <h2 class="section-title">Job Openings in Top Companies</h2>
+      <div class="company-cards-wrapper no-scrollbar">
+        <div class="company-card">
+          <div class="company-logo">
+            <img src="images/bajaj-removebg-preview.png" alt="Bajaj Allianz Logo"
+              style="object-fit: contain; height: 75px;">
+          </div>
+          <h3 class="company-name">Bajaj Allianz Life Insurance</h3>
+          <p class="company-description">Provider of life insurance and financial services.</p>
+
+          <button class="view-all-btn btns">View all →</button>
+        </div>
+        <div class="company-card">
+          <div class="company-logo">
+            <img src="images/paytm-removebg-preview.png" alt="Paytm Logo" style="object-fit: contain; height: 75px;">
+          </div>
+          <h3 class="company-name">Paytm Service Pvt. Ltd.</h3>
+          <p class="company-description">Digital payment and e-commerce facilitator.</p>
+          <button class="view-all-btn btns">View all →</button>
+        </div>
+        <div class="company-card">
+          <div class="company-logo">
+            <img src="images/zomato.png" alt="Zomato Logo" style="object-fit: contain; height: 75px;">
+          </div>
+          <h3 class="company-name">Zomato</h3>
+          <p class="company-description">Online food delivery marketplace.</p>
+          <button class="view-all-btn btns">View all →</button>
+        </div>
+      </div>
+      <a href="#" class="view-all-link">View all ></a>
+    </div>
+    <!-- tranding job -->
+
+    <div class="containerrr">
+      <h2>Trending job roles on Apna</h2>
+      <div class="marquee">
+        <div class="marquee-content">
+          <!-- Duplicate content to create seamless loop -->
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Business Development</p>
+            <p>2,525 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Retail / Counter Sales</p>
+            <p>1,644 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Marketing</p>
+            <p>1,189 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Logistics/Warehouse...</p>
+            <p>1,157 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Restaurant staff / Kit...</p>
+            <p>986 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Back Office</p>
+            <p>803 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">IT Support</p>
+            <p>117 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Maid / Baby Care</p>
+            <p>116 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Hardware & Network...</p>
+            <p>112 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">AC Technician</p>
+            <p>104 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Electrician / Wireman</p>
+            <p>100 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Draughtsman</p>
+            <p>81 openings</p>
+          </div>
+          <!-- Duplicate for seamless scrolling -->
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Business Development</p>
+            <p>2,525 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Retail / Counter Sales</p>
+            <p>1,644 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Marketing</p>
+            <p>1,189 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Logistics/Warehouse...</p>
+            <p>1,157 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Restaurant staff / Kit...</p>
+            <p>986 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Back Office</p>
+            <p>803 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">IT Support</p>
+            <p>117 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Maid / Baby Care</p>
+            <p>116 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Hardware & Network...</p>
+            <p>112 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">AC Technician</p>
+            <p>104 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Electrician / Wireman</p>
+            <p>100 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Draughtsman</p>
+            <p>81 openings</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="marquee">
+        <div class="marquee-content">
+          <!-- Duplicate content to create seamless loop -->
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Business Development</p>
+            <p>2,525 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Retail / Counter Sales</p>
+            <p>1,644 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Marketing</p>
+            <p>1,189 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Logistics/Warehouse...</p>
+            <p>1,157 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Restaurant staff / Kit...</p>
+            <p>986 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Back Office</p>
+            <p>803 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">IT Support</p>
+            <p>117 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Maid / Baby Care</p>
+            <p>116 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Hardware & Network...</p>
+            <p>112 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">AC Technician</p>
+            <p>104 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Electrician / Wireman</p>
+            <p>100 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Draughtsman</p>
+            <p>81 openings</p>
+          </div>
+          <!-- Duplicate for seamless scrolling -->
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Business Development</p>
+            <p>2,525 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Retail / Counter Sales</p>
+            <p>1,644 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Marketing</p>
+            <p>1,189 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Logistics/Warehouse...</p>
+            <p>1,157 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Restaurant staff / Kit...</p>
+            <p>986 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Back Office</p>
+            <p>803 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">IT Support</p>
+            <p>117 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Maid / Baby Care</p>
+            <p>116 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Hardware & Network...</p>
+            <p>112 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">AC Technician</p>
+            <p>104 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Electrician / Wireman</p>
+            <p>100 openings</p>
+          </div>
+          <div class="job-boxx">
+            <p><img src="https://via.placeholder.com/20" alt="icon">Draughtsman</p>
+            <p>81 openings</p>
+          </div>
+        </div>
+      </div>
+      <div class="view-all-btn">
+        <button class="view-all-btn btns" style="margin-bottom: 10%; width: 20%; height: 10vh;">View all </button>
+      </div>
+    </div>
+    <!-- testmonals -->
+
+    <div class="contain">
+      <div class="left-section">
+        <div class="quote-icon">"</div>
+        <h2>Join the community of 5 crore satisfied job seekers...</h2>
+        <div class="stars">Play Store Ratings ⭐⭐⭐⭐⭐</div>
+      </div>
+      <div class="testimonials">
+        <div class="testimonial-card">
+          <img src="images/test1.jpg" alt="Shiwangi Singla" />
+          <div class="testimonial-content">
+            <h4>Shiwangi Singla <span class="placed">PLACED</span><br><span class="stars">4.5⭐⭐⭐⭐</span></h4>
+            <p style="margin-left: -15vh;">Thanks Apna for helping me find a job without much hassle. If you are a
+              fresher or a skilled person with
+              expert knowledge in a specific field, you can easily find a job through the Apna app.</p>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <img src="images/test2.jpg" alt="Jenil Ghevariya" />
+          <div class="testimonial-content">
+            <h4>Jenil Ghevariya <span class="placed">PLACED</span><br><span class="stars">4.5⭐⭐⭐⭐</span></h4>
+            <p style="margin-left: -15vh;">This app is very helpful if you are looking for a job and the team is also
+              very supportive and friendly.
+              They guided me through every stage. It is very easy to find a job on Apna because there are a lot of job
+              options here for everyone. I got a job interview call very soon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <div class="section">
+      <h2>Find Jobs</h2>
+      <div class="job-grid">
+        <a class="job-link" href="#">Jobs in Agra</a>
+        <a class="job-link" href="#">Jobs in Ajmer</a>
+        <a class="job-link" href="#">Jobs in Asansol</a>
+        <a class="job-link" href="#">Jobs in Belagavi</a>
+        <a class="job-link" href="#">Jobs in Ahmedabad</a>
+        <a class="job-link" href="#">Jobs in Aligarh</a>
+        <a class="job-link" href="#">Jobs in Aurangabad</a>
+        <a class="job-link" href="#">Jobs in Bengaluru</a>
+        <a class="job-link hidden" href="#">Jobs in Ahmednagar</a>
+        <a class="job-link hidden" href="#">Jobs in Amritsar</a>
+        <a class="job-link hidden" href="#">Jobs in Bareilly</a>
+        <a class="job-link hidden" href="#">Jobs in Bhavnagar</a>
+      </div>
+      <div class="view-more" onclick="toggleJobs(this)">View More ⌄</div>
+    </div>
+
+    <!-- Start Hiring Section -->
+    <div class="section">
+      <h2>Start Hiring</h2>
+      <div class="job-grid">
+        <a class="job-link" href="#">Hire in Agra</a>
+        <a class="job-link" href="#">Hire in Ajmer</a>
+        <a class="job-link" href="#">Hire in Asansol</a>
+        <a class="job-link" href="#">Hire in Belagavi</a>
+        <a class="job-link" href="#">Hire in Ahmedabad</a>
+        <a class="job-link" href="#">Hire in Aligarh</a>
+        <a class="job-link" href="#">Hire in Aurangabad</a>
+        <a class="job-link" href="#">Hire in Bengaluru</a>
+        <a class="job-link hidden" href="#">Hire in Ahmednagar</a>
+        <a class="job-link hidden" href="#">Hire in Amritsar</a>
+        <a class="job-link hidden" href="#">Hire in Bareilly</a>
+        <a class="job-link hidden" href="#">Hire in Bhavnagar</a>
+      </div>
+      <div class="view-more" onclick="toggleJobs(this)">View More ⌄</div>
+    </div>
+
+    <script>
+      function toggleJobs(button) {
+        const hiddenLinks = button.previousElementSibling.querySelectorAll('.hidden');
+        hiddenLinks.forEach(link => link.classList.toggle('hidden'));
+        button.textContent = button.textContent.includes("More") ? "View Less ∧" : "View More ⌄";
+      }
+    </script>
+
+</body>
+
+</html>
